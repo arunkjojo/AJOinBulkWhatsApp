@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "ajoin-test-app",
-    "slug": "ajoin-test-app",
-    "version": "1.0.0",
+    "name": "AJOinBulkWhatsApp",
+    "slug": "AJOinBulkWhatsApp",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -24,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.arunkjojo.ajoinbulkwhatsapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
