@@ -1,15 +1,23 @@
 import React, { useState } from 'react'
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
 import User from '../Components/User'
-import { storeData } from '../Helper/storeData';
+import AsyncStorageHelper from '../Helper/AsyncStorageHelper';
 
 const Settings = () => {
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState('');
+    const [confirmEmail, setConfirmEmail] = useState('')
+    const [confirmUpdate, setConfirmUpdate] = useState(false);
 
     const initiateRegister = () => {
         console.log(">>>Email: " + email);
-        storeData('userEmail', email)
+        AsyncStorageHelper.storeData('userEmail', email)
     }
+    React.useEffect(()=>{
+        AsyncStorageHelper.getData('userEmail', setConfirmEmail);
+        if(confirmEmail === email) {
+            setConfirmUpdate(true)
+        }
+    },[]);
     return (
         <SafeAreaView style={styles.container}>
             <User />
@@ -26,14 +34,13 @@ const Settings = () => {
                     style={styles.emailInput}
                     onChangeText={(emailId)=>setEmail(emailId)}
                 />
-                
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.updateButton}
                     onPress={initiateRegister}
                 >
                     <Text style={styles.buttonText}>
-                        Update Email ID
+                        {!confirmUpdate ? 'Update Email ID' : 'Already Updated' }
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -63,6 +70,7 @@ const Settings = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 10,
     },
     emailContainer: {
         padding: 10,

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 
-import getData from '../Helper/getData';
+import AsyncStorageHelper from '../Helper/AsyncStorageHelper';
 
 
 export default function User() {
@@ -11,12 +11,16 @@ export default function User() {
     const [balance, setBalance] = React.useState('')
 
     React.useEffect(()=>{
-        const emailData= getData('@userEmail');
-        setEmail(emailData !== null ? emailData : '');
-        const appVersion= getData('@appVersion');
-        setVersion(appVersion !== null ? appVersion : '');
-        const balanceCount= getData('@balanceCount');
-        setBalance(balanceCount !== null ? balanceCount : '');
+        AsyncStorageHelper.getData('userEmail', setEmail);
+        AsyncStorageHelper.getData('appVersion', setVersion);
+        AsyncStorageHelper.getData('balanceCount', setBalance);
+
+        if(version === '' || version !== 'Paid'){
+            AsyncStorageHelper.storeData('appVersion', 'Trial')
+        }
+        if(balance === '' && version == 'Trial'){
+            AsyncStorageHelper.storeData('balanceCount', '25')
+        }
     },[]);
 
     return (
