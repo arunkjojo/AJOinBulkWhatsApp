@@ -5,19 +5,18 @@ import AsyncStorageHelper from '../Helper/AsyncStorageHelper';
 
 const Settings = () => {
     const [email, setEmail] = useState('');
-    const [confirmEmail, setConfirmEmail] = useState('')
-    const [confirmUpdate, setConfirmUpdate] = useState(false);
-
-    const initiateRegister = () => {
-        console.log(">>>Email: " + email);
-        AsyncStorageHelper.storeData('userEmail', email)
+    const [timeInterval, setTimeInterval] = useState(5000)
+    
+    const timeIntervalHandler = (time) => {
+        let timeSec = parseInt(time*1000);
+        console.log("Time", timeSec);
+        setTimeInterval(timeSec);
     }
-    React.useEffect(()=>{
-        AsyncStorageHelper.getData('userEmail', setConfirmEmail);
-        if(confirmEmail === email) {
-            setConfirmUpdate(true)
-        }
-    },[]);
+
+    const updateSettings = () => {
+        AsyncStorageHelper.storeData('userEmail', email);
+        AsyncStorageHelper.storeData('timeInterval', timeInterval.toString());
+    }
     return (
         <SafeAreaView style={styles.container}>
             <User />
@@ -29,18 +28,30 @@ const Settings = () => {
                     placeholder={'Enter Your Email ID'}
                     keyboardType='email-address'
                     textContentType= 'emailAddress'
-                    autoFocus
                     editable
-                    style={styles.emailInput}
+                    style={styles.inputText}
+                    value={email}
                     onChangeText={(emailId)=>setEmail(emailId)}
                 />
+
+                <Text style={styles.titleTextSmall}>
+                    Set Time Delay(sec)
+                </Text>
+                <TextInput
+                    placeholder={'Enter Time Interval in seconds'}
+                    keyboardType = 'numeric'
+                    style={styles.inputText}
+                    value={(timeInterval)}
+                    onChangeText={(time)=>timeIntervalHandler(time)}
+                />
+
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.updateButton}
-                    onPress={initiateRegister}
+                    onPress={updateSettings}
                 >
                     <Text style={styles.buttonText}>
-                        {!confirmUpdate ? 'Update Email ID' : 'Already Updated' }
+                        Update Settings
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -84,7 +95,7 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         fontSize: 16,
     },
-    emailInput: {
+    inputText: {
         borderColor: '#8ad24e',
         borderWidth: 1,
         paddingHorizontal: 25,
